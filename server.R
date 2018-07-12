@@ -8,9 +8,23 @@ shinyServer(function(input, output) {
   ##############################
   model <- readRDS("/Users/eugenelin/RStudio/DP_Proj/DDP/model_forest.rds")
   df <- read.csv("/Users/eugenelin/RStudio/DP_Proj/DDP/crime2017.csv")
+  # Vancouver City Hall
+  latitude = 49.2609
+  longitude = -123.1139
+  YEAR <- as.numeric(format(Sys.time(), "%Y"))
+  MONTH <- as.numeric(format(Sys.time(), "%m"))
+  DAY <- as.numeric(format(Sys.time(), "%d"))
+  HOUR <- as.numeric(format(Sys.time(), "%H"))
+  my_df <- data.frame(YEAR, MONTH, DAY, HOUR, longitude, latitude, WEEKDAY)
+  result <- predict(model, newdata=my_df)
+  output$crime <- renderText(paste("Possible Criminal Acitivty around Vancouver City Hall at this time: ",as.character(result)))
+  
+  #output$debug <- renderText(as.character(HOUR))
+  
   output$mymap <- renderLeaflet({leaflet(df) %>% 
-      addTiles() %>%
-      addCircleMarkers(clusterOptions = markerClusterOptions(), popup=paste(df$TYPE), weight=1, radius = 10 ) 
+      addTiles() %>% 
+      addCircleMarkers(clusterOptions = markerClusterOptions(), popup=paste(df$TYPE), weight=1, radius = 10 ) %>%
+      addMarkers(lat = 49.2609, lng = -123.1139, layerId = "foo")
   })
       
   points <- eventReactive(input$mymap_click, {
