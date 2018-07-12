@@ -24,13 +24,22 @@ shinyServer(function(input, output) {
   rv$longitude = -123.1139
 
   my_pred <- reactive({
-    YEAR <- as.numeric(format(input$date_input, "%Y"))
-    MONTH <- as.numeric(format(input$date_input, "%m"))
-    DAY <- as.numeric(format(input$date_input, "%d"))
-    HOUR <- input$time_input$hour
-    WEEKDAY <- weekdays(as.Date(paste(DAY, MONTH, YEAR, sep="-"),'%d-%m-%Y'))
-    longitude = rv$longitude
-    latitude = rv$latitude
+    #YEAR <- as.numeric(format(input$date_input, "%Y"))
+    #MONTH <- as.numeric(format(input$date_input, "%m"))
+    #DAY <- as.numeric(format(input$date_input, "%d"))
+    #HOUR <- input$time_input$hour
+    #WEEKDAY <- weekdays(as.Date(paste(DAY, MONTH, YEAR, sep="-"),'%d-%m-%Y'))
+    #longitude = rv$longitude
+    #latitude = rv$latitude
+    #my_df <- data.frame(YEAR, MONTH, DAY, HOUR, longitude, latitude, WEEKDAY)
+    
+    YEAR <- 2017
+    MONTH <- 7
+    DAY <- 12
+    HOUR <- 13
+    WEEKDAY <- "Thursday"
+    longitude = 49.2609
+    latitude = -123.1139
     my_df <- data.frame(YEAR, MONTH, DAY, HOUR, longitude, latitude, WEEKDAY)
 
     predict(model, newdata=my_df)
