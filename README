@@ -1,0 +1,4 @@
+- Click on the map somewhere in the City of Vancouver, specify a date and a time, the app will predict what crime you are likely to encounter at the specified location at the time of the day.
+- The map also displays location of all reported crimes in the City of Vancouver in 2017. Click on the circle on the map to explore. Note that due to privacy concerns some crimes are not reported in the map.
+- The app builds on data provided by the Vancouver Police Department thru <a href="https://data.vancouver.ca/datacatalogue/crime-data.htm">City of Vancouver's Open Data portal</a>.
+- We partitioned the data into 75% training and 25% validation set. Training is peformed on the training set using Random Forest, with k-fold cross-validation where k=5.
