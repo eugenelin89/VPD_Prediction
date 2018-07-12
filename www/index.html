@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <script type="application/shiny-singletons">7bc7a3c0c873e49dfad4fec4b785db36394f8050</script>
+  <script type="application/html-dependencies">json2[2014.02.04];jquery[1.12.4];shiny[1.1.0];bootstrap-datepicker[1.6.4];htmlwidgets[1.2];leaflet[1.3.1];leafletfix[1.0.0];Proj4Leaflet[1.0.1];rstudio_leaflet[1.3.1];leaflet-binding[2.0.1];bootstrap[3.3.7]</script>
+<script src="shared/json2-min.js"></script>
+<script src="shared/jquery.min.js"></script>
+<link href="shared/shiny.css" rel="stylesheet" />
+<script src="shared/shiny.min.js"></script>
+<link href="shared/datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" />
+<script src="shared/datepicker/js/bootstrap-datepicker.min.js"></script>
+<script>
+(function() {
+  var datepicker = $.fn.datepicker.noConflict();
+  $.fn.bsDatepicker = datepicker;
+})();
+</script>
+<script src="htmlwidgets-1.2/htmlwidgets.js"></script>
+<link href="leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="leaflet-1.3.1/leaflet.js"></script>
+<link href="leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="Proj4Leaflet-1.0.1/proj4-compressed.js"></script>
+<script src="Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="leaflet-binding-2.0.1/leaflet.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="shared/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<script src="shared/bootstrap/js/bootstrap.min.js"></script>
+<script src="shared/bootstrap/shim/html5shiv.min.js"></script>
+<script src="shared/bootstrap/shim/respond.min.js"></script>  <title>What crime will you experinece in City of Vancouver</title>
+  <script src="shinyTime/input_binding_time.js"></script>
+
+</head>
+
+<body>
+  <div class="container-fluid">
+    <h2>What crime will you experinece in City of Vancouver?</h2>
+
+    <ul>
+      <li>Click on the map somewhere in the City of Vancouver, specify a date and a time, the app will predict what crime you are likely to encounter at the specified location at the time of the day.</li>
+      <li>The map also displays location of all reported crimes in the City of Vancouver in 2017. Click on the circle on the map to explore. Note that due to privacy concerns some crimes are not reported in the map.</li>
+      <li>The app builds on data provided by the Vancouver Police Department thru <a href="https://data.vancouver.ca/datacatalogue/crime-data.htm">City of Vancouver's Open Data portal</a>.</li>
+      <li>We peform training using Random Forest, with k-fold cross-validation where k=5. Accuracy is approximately 50% running against validation set.</li>
+    </ul>
+    <div class="row">
+      <div class="col-sm-4">
+        <form class="well">
+          <div id="date_input" class="shiny-date-input form-group shiny-input-container">
+            <label class="control-label" for="date_input">Enter Date</label>
+            <input type="text" class="form-control" data-date-language="en" data-date-week-start="0" data-date-format="yyyy-mm-dd" data-date-start-view="month" data-date-autoclose="true"/>
+          </div>
+          <div id="time_input" class="my-shiny-time-input form-group shiny input-container">
+            <label class="control-label" for="time_input">Enter time</label>
+            <div class="input-group">
+              <input type="number" min="0" max="23" step="1" value="10" style="width: 8ch" class="form-control shinytime-hours"/>
+              <input type="number" min="0" max="59" step="1" value="58" style="width: 8ch" class="form-control shinytime-mins"/>
+              <input type="number" min="0" max="59" step="1" value="23" style="width: 8ch" class="form-control shinytime-secs"/>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-sm-8">
+        The map may take a few seconds to load. Thank you for your patience.
+        <div id="mymap" style="width:100%; height:400px; " class="leaflet html-widget html-widget-output"></div>
+        <p></p>
+        <h4>
+          <div id="lat" class="shiny-text-output"></div>
+        </h4>
+        <h4>
+          <div id="lng" class="shiny-text-output"></div>
+        </h4>
+        <h3>
+          <div id="crime" class="shiny-text-output"></div>
+        </h3>
+        <p></p>
+        <div id="debug" class="shiny-text-output"></div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
