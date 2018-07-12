@@ -15,12 +15,10 @@ shinyServer(function(input, output) {
   MONTH <- as.numeric(format(Sys.time(), "%m"))
   DAY <- as.numeric(format(Sys.time(), "%d"))
   HOUR <- as.numeric(format(Sys.time(), "%H"))
+  WEEKDAY <- weekdays(as.Date(paste(DAY, MONTH, YEAR, sep="-"),'%d-%m-%Y'))
   my_df <- data.frame(YEAR, MONTH, DAY, HOUR, longitude, latitude, WEEKDAY)
   result <- predict(model, newdata=my_df)
-  #output$crime <- renderText(paste("Possible Criminal Acitivty around Vancouver City Hall at this time: ",as.character(result)))
-  
-  #output$debug <- renderText(as.character(HOUR))
-  
+
   rv <- reactiveValues()
   rv$latitude = 49.2609
   rv$longitude = -123.1139
@@ -37,9 +35,7 @@ shinyServer(function(input, output) {
 
     predict(model, newdata=my_df)
   })
-  #output$debug <- renderText({as.character(rv$latitude)})
-  #output$debug <- renderText({rv$foo})
-  #output$debug <- paste("(",as.character(rv$latitude), ",", as.character(rv$longitude), ")")
+
   output$lat <- renderText({as.character(rv$latitude)})
   output$lng <- renderText({as.character(rv$longitude)})
   output$crime <- renderText({as.character(my_pred())})
