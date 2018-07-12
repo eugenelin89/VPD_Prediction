@@ -21,7 +21,9 @@ shinyUI(fluidPage(
       p(),
       textOutput("lng"),
       p(),
-      textOutput("crime")
+      textOutput("crime"),
+      p(),
+      textOutput("debug")
 
     )
   )

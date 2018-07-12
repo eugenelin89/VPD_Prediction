@@ -3,6 +3,7 @@ library(leaflet)
 #library(sp)
 #library(rgdal)
 library(caret)
+
 shinyServer(function(input, output) {
   ##############################
   model <- readRDS("/Users/eugenelin/RStudio/DP_Proj/DDP/model_forest.rds")
@@ -12,7 +13,9 @@ shinyServer(function(input, output) {
       addCircleMarkers(clusterOptions = markerClusterOptions(), popup=paste(df$TYPE), weight=1, radius = 10 ) 
   })
       
-
+  points <- eventReactive(input$mymap_click, {
+    cbind(as.numeric(input$mymap_click$lng), as.numeric(input$mymap_click$lat))
+  }, ignoreNULL = FALSE)
   
   observeEvent(input$mymap_click,{
     YEAR <- as.numeric(format(input$date_input, "%Y"))
@@ -25,10 +28,14 @@ shinyServer(function(input, output) {
     WEEKDAY <- weekdays(as.Date(paste(DAY, MONTH, YEAR, sep="-"),'%d-%m-%Y'))
     my_df <- data.frame(YEAR, MONTH, DAY, HOUR, longitude, latitude, WEEKDAY)
     result <- predict(model, newdata=my_df)
-    output$lat <- renderText(as.character(input$mymap_click$lat))
-    output$lng <- renderText(as.character(input$mymap_click$lng))
-    output$crime <- renderText(as.character(result))
+    #output$lat <- renderText(as.character(input$mymap_click$lat))
+    #output$lng <- renderText(as.character(input$mymap_click$lng))
+    coordinate <- paste("(",as.character(input$mymap_click$lat), ",", as.character(input$mymap_click$lng), ")")
+    output$crime <- renderText(paste(coordinate," ",as.character(result)))
     #addMarkers(output$mymap, lng = longitude, lat = latitude)
+    
+    leafletProxy("mymap")  %>% addMarkers(lat = latitude, lng = longitude, layerId = "foo")
+    #output$debug <- renderText(as.character("A"))
   })
   
 })
