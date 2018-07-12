@@ -1,7 +1,7 @@
 library(sp)
 library(rgdal)
 library(caret)
-df <- read.csv("/Users/eugenelin/RStudio/DP_Proj/DDP/crime_csv_all_years.csv")
+df <- read.csv("/Users/eugenelin/Downloads/crime_csv_all_years/crime_csv_all_years.csv")
 df <- df[complete.cases(df),]
 
 # Map from UTM to Coordinate
