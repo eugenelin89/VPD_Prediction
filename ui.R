@@ -9,12 +9,12 @@ shinyUI(fluidPage(
       dateInput("date_input", "Enter Date", value = NULL, min = NULL, max = NULL,
                 format = "yyyy-mm-dd", startview = "month", weekstart = 0,
                 language = "en", width = NULL, autoclose = TRUE),
-      timeInput("time_input", "Enter time", value = strptime("12:34:56", "%T"))
+      timeInput("time_input", "Enter time", value = strptime("12:34", "%H:%M"))
     ),
     mainPanel(
 
       
-      h3("map"),
+      
       leafletOutput("mymap"),
       p(),
       textOutput("lat"),
