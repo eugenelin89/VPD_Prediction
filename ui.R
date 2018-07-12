@@ -3,7 +3,7 @@ library(shinyTime)
 library(leaflet)
 
 shinyUI(fluidPage(
-  titlePanel("Predict what crime will you experinece in City of Vancouver"),
+  titlePanel("What crime will you experinece in City of Vancouver"),
   sidebarLayout(
     sidebarPanel(
       dateInput("date_input", "Enter Date", value = NULL, min = NULL, max = NULL,
@@ -17,11 +17,9 @@ shinyUI(fluidPage(
       
       leafletOutput("mymap"),
       p(),
-      textOutput("lat"),
-      p(),
-      textOutput("lng"),
-      p(),
-      textOutput("crime"),
+      h4(textOutput("lat")),
+      h4(textOutput("lng")),
+      h3(textOutput("crime")),
       p(),
       textOutput("debug")
 

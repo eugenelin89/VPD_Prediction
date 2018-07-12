@@ -17,7 +17,7 @@ shinyServer(function(input, output) {
   HOUR <- as.numeric(format(Sys.time(), "%H"))
   my_df <- data.frame(YEAR, MONTH, DAY, HOUR, longitude, latitude, WEEKDAY)
   result <- predict(model, newdata=my_df)
-  output$crime <- renderText(paste("Possible Criminal Acitivty around Vancouver City Hall at this time: ",as.character(result)))
+  #output$crime <- renderText(paste("Possible Criminal Acitivty around Vancouver City Hall at this time: ",as.character(result)))
   
   #output$debug <- renderText(as.character(HOUR))
   
@@ -40,6 +40,8 @@ shinyServer(function(input, output) {
   #output$debug <- renderText({as.character(rv$latitude)})
   #output$debug <- renderText({rv$foo})
   #output$debug <- paste("(",as.character(rv$latitude), ",", as.character(rv$longitude), ")")
+  output$lat <- renderText({as.character(rv$latitude)})
+  output$lng <- renderText({as.character(rv$longitude)})
   output$crime <- renderText({as.character(my_pred())})
 
   
@@ -64,14 +66,8 @@ shinyServer(function(input, output) {
     WEEKDAY <- weekdays(as.Date(paste(DAY, MONTH, YEAR, sep="-"),'%d-%m-%Y'))
     my_df <- data.frame(YEAR, MONTH, DAY, HOUR, longitude, latitude, WEEKDAY)
     result <- predict(model, newdata=my_df)
-    #output$lat <- renderText(as.character(input$mymap_click$lat))
-    #output$lng <- renderText(as.character(input$mymap_click$lng))
-    #coordinate <- paste("(",as.character(input$mymap_click$lat), ",", as.character(input$mymap_click$lng), ")")
-    #output$crime <- renderText(paste(coordinate," ",as.character(result)))
-    #output$crime <- renderText(as.character(result))
 
     leafletProxy("mymap")  %>% addMarkers(lat = latitude, lng = longitude, layerId = "foo")
-    #output$debug <- renderText(as.character("A"))
     rv$latitude = latitude
     rv$longitude = longitude
   })
