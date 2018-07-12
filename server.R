@@ -21,6 +21,28 @@ shinyServer(function(input, output) {
   
   #output$debug <- renderText(as.character(HOUR))
   
+  rv <- reactiveValues()
+  rv$latitude = 49.2609
+  rv$longitude = -123.1139
+
+  my_pred <- reactive({
+    YEAR <- as.numeric(format(input$date_input, "%Y"))
+    MONTH <- as.numeric(format(input$date_input, "%m"))
+    DAY <- as.numeric(format(input$date_input, "%d"))
+    HOUR <- input$time_input$hour
+    WEEKDAY <- weekdays(as.Date(paste(DAY, MONTH, YEAR, sep="-"),'%d-%m-%Y'))
+    longitude = rv$longitude
+    latitude = rv$latitude
+    my_df <- data.frame(YEAR, MONTH, DAY, HOUR, longitude, latitude, WEEKDAY)
+
+    predict(model, newdata=my_df)
+  })
+  #output$debug <- renderText({as.character(rv$latitude)})
+  #output$debug <- renderText({rv$foo})
+  #output$debug <- paste("(",as.character(rv$latitude), ",", as.character(rv$longitude), ")")
+  output$crime <- renderText({as.character(my_pred())})
+
+  
   output$mymap <- renderLeaflet({leaflet(df) %>% 
       addTiles() %>% 
       addCircleMarkers(clusterOptions = markerClusterOptions(), popup=paste(df$TYPE), weight=1, radius = 10 ) %>%
@@ -44,12 +66,14 @@ shinyServer(function(input, output) {
     result <- predict(model, newdata=my_df)
     #output$lat <- renderText(as.character(input$mymap_click$lat))
     #output$lng <- renderText(as.character(input$mymap_click$lng))
-    coordinate <- paste("(",as.character(input$mymap_click$lat), ",", as.character(input$mymap_click$lng), ")")
-    output$crime <- renderText(paste(coordinate," ",as.character(result)))
-    #addMarkers(output$mymap, lng = longitude, lat = latitude)
-    
+    #coordinate <- paste("(",as.character(input$mymap_click$lat), ",", as.character(input$mymap_click$lng), ")")
+    #output$crime <- renderText(paste(coordinate," ",as.character(result)))
+    #output$crime <- renderText(as.character(result))
+
     leafletProxy("mymap")  %>% addMarkers(lat = latitude, lng = longitude, layerId = "foo")
     #output$debug <- renderText(as.character("A"))
+    rv$latitude = latitude
+    rv$longitude = longitude
   })
   
 })
